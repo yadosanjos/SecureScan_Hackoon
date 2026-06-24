@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css')}}">
+    <title>Hackoon</title>
+</head>
+<body>
+    <header>
+        <h1 class="logo">SecureScan</h1>
+        <p class="subtitle">Verificador de Segurança</p>
+    </header>
+
+    <main>
+        <section class="busca">
+            <h2>Verifique a confiabilidade de um site</h2>
+            <p>Insira a URL completa.</p>
+
+            <form class="busca-form" action="/analisar" method="post">
+                <input class="busca-form_input" type="text" name="url" autocomplete="off" placeholder="https://exemplo.com" required>
+                <button type="submit" class="busca-form_btn">Analisar</button>
+            </form>
+        </section>
+
+        {% if url_analisada %}
+            <section class="relatorio aparecer">
+                <div class="relatorio-header">
+                    <h3>Relatório de: <span class="url-analisada">{{ url_analisada if url_analisada else "Nenhuma URL analisada"}}</span></h3>
+                </div>
+
+                <div class="relatorio-pontuacao">
+                    {% if status == "seguro" %}
+                    <h2 style="color: #22c55e;">Seguro</h2>
+                    <p>Site não identificado como ameaça</p>
+
+                    {% else %}
+                    <h2 style="color: #ef4444">Perigoso</h2>
+                    <p>Site listado como ameaça pelo Google</p>
+
+                    {% endif %}
+                </div>
+
+                <div class="relatorio-check">
+                    <div class="check {{ 'positivo' if https_status == 'ativo' else 'negativo' }}">
+                        <details>
+                            <summary style="cursor: pointer; outline: none;">
+                                {{ '✓' if https_status == 'ativo' else '✗' }} 
+                                HTTPS: {{ 'Presente' if https_status == 'ativo' else 'Não presente' }} 
+                                <span style="font-size: 0.8rem; opacity: 0.7; margin-left: 5px; letter-spacing: 1px;">(Clique para saber mais)</span>
+                            </summary>
+                            
+                            <div class="explicao-conteudo" style="margin-top: 8px; padding-left: 15px; font-size: 0.9rem; line-height: 1.4; opacity: 0.9;">
+                                {% if https_status == 'ativo' %}
+                                    <p>Por que isso é bom? O HTTPS indica que a comunicação entre você e este site é criptografada. Isso impede que criminosos interceptem seus dados (como senhas ou cartões) no caminho.</p>
+                                {% else %}
+                                    <p>Por que isso é perigoso? Sem o HTTPS, qualquer dado que você digitar neste site trafega pela internet em texto puro. Qualquer pessoa na mesma rede (como um Wi-Fi público) pode espionar o que você está fazendo.</p>
+                                    <p>Sugestão: Evite inserir senhas, dados bancários ou informações pessoais neste site. Sempre prefira versões que utilizem HTTPS para garantir que seus dados sejam transmitidos de forma segura.</p>
+                                    {% endif %}
+                            </div>
+                        </details>
+                    </div>
+                    <div class="check {{ 'positivo' if cert_status == 'valido' else 'negativo' }}">
+
+                    <details>
+                        <summary style="cursor: pointer;">
+                            {{ '✓' if cert_status == 'valido' else '✗' }}
+
+                            {% if cert_status == 'valido' %}
+                                Certificado válido até {{ cert_validade }}
+                            {% elif cert_status == 'vencido' %}
+                                Certificado vencido
+                            {% elif cert_status == 'invalido' %}
+                                Certificado inválido
+                            {% elif cert_status == 'sem_ssl' %}
+                                Site não possui SSL
+                            {% elif cert_status == 'dominio_inexistente' %}
+                                Domínio não encontrado
+                            {% else %}
+                                Erro ao verificar certificado
+                            {% endif %}
+
+                            <span style="font-size: 0.8rem; opacity: 0.7; margin-left: 5px;">
+                                (Clique para saber mais)
+                            </span>
+                        </summary>
+
+                        <div style="margin-top: 8px; padding-left: 15px; font-size: 0.9rem; line-height: 1.4; opacity: 0.9;">
+
+                            {% if cert_status == 'valido' %}
+                                <p>
+                                    O certificado SSL garante que a comunicação entre o usuário e o site é criptografada e segura.
+                                    Ele também confirma que o site é quem diz ser.
+                                </p>
+                                <p><strong>Sugestão:</strong> Mesmo com certificado válido, sempre verifique se o domínio está correto antes de inserir dados sensíveis.</p>
+
+                            {% elif cert_status == 'vencido' %}
+                                <p>
+                                    Um certificado vencido indica que a segurança do site não está mais atualizada.
+                                    Navegar ou inserir dados aqui pode não ser seguro.
+                                </p>
+                                <p><strong>Sugestão:</strong> Evite inserir informações pessoais ou continuar navegação neste site.</p>
+
+                            {% elif cert_status == 'invalido' %}
+                                <p>
+                                    Um certificado inválido pode indicar tentativa de fraude ou configuração incorreta de segurança.
+                                </p>
+                                <p><strong>Sugestão:</strong> Não prossiga neste site e evite qualquer tipo de login ou pagamento.</p>
+
+                            {% elif cert_status == 'sem_ssl' %}
+                                <p>
+                                    Este site não utiliza SSL, ou seja, a comunicação não é criptografada.
+                                </p>
+                                <p><strong>Sugestão:</strong> Evite enviar qualquer informação pessoal ou sensível.</p>
+
+                            {% else %}
+                                <p>
+                                    Não foi possível verificar o certificado deste site.
+                                </p>
+                                <p><strong>Sugestão:</strong> Tente novamente mais tarde ou evite continuar a navegação.</p>
+                            {% endif %}
+
+                        </div>
+                    </details>
+
+                </div>
+                    <div class="check negativo">
+                        - Sei lá o que
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+    </main>
+
+    <footer class="footer">
+        <p>
+            &copy; 2026 - Desenvolvido por Laís Silva e Yasmin dos Anjos
+        </p>
+    </footer>
+</body>
+</html> 
