@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Hackoon</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo.png') }}">
+    <title>SecureScan - Verificador de Segurança</title>
 </head>
 <body>
     <header>
         <img src="{{ url_for('static', filename='img/Logo.png') }}" alt="Logo SecureScan" class="logo-img">
 
-        <h1 class="logo">SecureScan</h1>
+        <h1 class="logo">Secure<span>Scan</span></h1>
         <p class="subtitle">Verificador de Segurança</p>
     </header>
 
@@ -33,11 +37,11 @@
 
                 <div class="relatorio-pontuacao">
                     {% if status == "seguro" %}
-                    <h2 style="color: #22c55e;">Seguro</h2>
+                    <h2 style="color: #41A75A;">Seguro</h2>
                     <p>Site não identificado como ameaça</p>
 
                     {% else %}
-                    <h2 style="color: #ef4444">Perigoso</h2>
+                    <h2 style="color: #660404">Perigoso</h2>
                     <p>Site listado como ameaça pelo Google</p>
 
                     {% endif %}
@@ -47,7 +51,7 @@
                     <div class="check {{ 'positivo' if https_status == 'ativo' else 'negativo' }}">
                         <details>
                             <summary style="cursor: pointer; outline: none;">
-                                {{ '✓' if https_status == 'ativo' else '✗' }} 
+                                <span class="simbolo">{{ '✓' if https_status == 'ativo' else '✗' }} </span>
                                 HTTPS: {{ 'Presente' if https_status == 'ativo' else 'Não presente' }} 
                                 <span style="font-size: 0.8rem; opacity: 0.7; margin-left: 5px; letter-spacing: 1px;">(Clique para saber mais)</span>
                             </summary>
@@ -66,7 +70,7 @@
 
                     <details>
                         <summary style="cursor: pointer;">
-                            {{ '✓' if cert_status == 'valido' else '✗' }}
+                            <span class="simbolo">{{ '✓' if cert_status == 'valido' else '✗' }}</span>
 
                             {% if cert_status == 'valido' %}
                                 Certificado válido até {{ cert_validade }}

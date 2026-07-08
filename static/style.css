@@ -4,7 +4,7 @@
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
     --cor-fundo: #0e0514;
-    --cor-primaria: #a855f7;
+    --cor-primaria: #AF69EA;
     --cor-primaria-glow: rgba(168, 85, 247, 0.35);
     --cor-secundaria: #130b24;
     --cor-texto-suave: #cbd5e1;
@@ -22,12 +22,12 @@ body {
 
 header {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem 0 3rem 0;
 }
 
 .logo-img {
     display: block;
-    margin: 0 auto 1rem auto; 
+    margin: 0 auto 0 auto; 
     max-width: 150px;         
     height: auto;             
     object-fit: contain;
@@ -38,13 +38,20 @@ header {
     font-weight: bold;
     color: var(--cor-primaria);
     letter-spacing: 1px;
+    margin-top: -0.2rem; 
+    margin-bottom: 0.5rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.logo span {
+    color: #A18AF3; 
 }
 
 .subtitle {
-    color: var(--cor-texto-suave);
-    font-size: 1.65rem;
-    text-transform: uppercase;
+    color: #DBC9FF;
+    font-size: 1.30rem;
     font-weight: bold;
+    font-family: 'Inter', sans-serif;
 }
 
 main {
@@ -66,6 +73,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    font-family: 'Inter', sans-serif;
 }
 
 .busca h2 {
@@ -110,6 +118,7 @@ main {
     background: linear-gradient(135deg, var(--cor-primaria), #7c3aed);
     transition: 0.3s;
     text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
 }
 
 .busca-form_btn:hover {
@@ -137,6 +146,12 @@ main {
 .relatorio-pontuacao h2 {
     font-size: 3rem;
     color: #22c55e;
+    font-family: 'Inter', sans-serif;
+}
+
+.relatorio-pontuacao p {
+    margin-top: 0.5rem;
+    font-family: 'Inter', sans-serif; 
 }
 
 .check {
@@ -147,13 +162,13 @@ main {
 }
 
 .positivo {
-    background-color: #14532d;
-    border-left: 5px solid #106d32;
+    background-color: #31144A;
+    border-left: 5px solid #AF69EA;
 }
 
 .negativo {
-    background-color: #854d0e;
-    border-left: 5px solid #ac7619;
+    background-color: #2f0101;
+    border-left: 5px solid #660000;
 }
 
 .footer {
@@ -167,6 +182,7 @@ main {
 
 .footer p {
     font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
 }
 
 .aparecer {
@@ -187,4 +203,12 @@ main {
 
 summary {
     list-style: none;
+}
+
+.check.positivo summary .simbolo{
+    color: #41A75A; 
+}
+
+.check.negativo summary .simbolo{
+    color: #660000; 
 }
