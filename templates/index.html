@@ -45,18 +45,20 @@
         {% if url_analisada %}
             <section class="relatorio aparecer">
                 <div class="relatorio-header">
-                    <h3>Relatório de: <span class="url-analisada">{{ url_analisada if url_analisada else "Nenhuma URL analisada"}}</span></h3>
+                    <h3>Relatório de <span class="url-analisada">{{ url_analisada if url_analisada else "Nenhuma URL analisada"}}</span></h3>
                 </div>
 
                 <div class="relatorio-pontuacao">
                     <h2 style="color: {% if score >= 90 %}#2E7D32{% elif score >= 70 %}#41A75A{% elif score >= 50 %}#E8C547{% elif score >= 25 %}#E8843A{% else %}#660404{% endif %};">
                         {{ score }}/100
                     </h2>
-                    <p>{{ classificacao }}</p>
+                    <p style="color: {% if score >= 90 %}#2E7D32{% elif score >= 70 %}#41A75A{% elif score >= 50 %}#E8C547{% elif score >= 25 %}#E8843A{% else %}#660404{% endif %};">
+                        {{ classificacao }}
+                    </p>
                 </div>
 
-                <div class="relatorio-check">
-                    <!-- API GOOGLE SAFE BROWSING -->
+                <div class="painel-dashboard">
+                  <div class="painel-esquerda">
                     <div class="check {{ 'positivo' if status == 'seguro' else 'negativo' }}">
                         <details>
                             <summary style="cursor: pointer; outline: none;">
@@ -246,6 +248,32 @@
                         </details>
                     </div>
                 </div>
+
+                <div class="painel-direita">
+                        <div class="bloco-grafico">
+                            <span class="titulo-bloco">Barra de Pontos</span>
+                            <div class="barra-progresso-container">
+                                <div class="barra-progresso-preenchimento" style="width: {{ score }}%; background-color: {% if score >= 90 %}#2E7D32{% elif score >= 70 %}#41A75A{% elif score >= 50 %}#E8C547{% elif score >= 25 %}#E8843A{% else %}#660404{% endif %};"></div>
+                            </div>
+                        </div>
+
+                        <div class="bloco-tabela">
+                            <span class="titulo-bloco">Distribuição de Pontos</span>
+                            <div class="tabela-linhas">
+                                <div class="tabela-linha"><span>Safe Browsing</span><strong>+{% if status == 'seguro' %}20{% else %}0{% endif %}</strong></div>
+                                <div class="tabela-linha"><span>HTTPS</span><strong>+{% if https_status == 'ativo' %}10{% else %}0{% endif %}</strong></div>
+                                <div class="tabela-linha"><span>SSL / Certificado</span><strong>+{% if cert_status == 'valido' %}15{% else %}0{% endif %}</strong></div>
+                                <div class="tabela-linha"><span>Idade Domínio</span><strong>+{% if idade_status == 'bom' %}20{% else %}5{% endif %}</strong></div>
+                                <div class="tabela-linha"><span>Headers</span><strong>+{{ pontos_headers }}</strong></div>
+                                <div class="tabela-linha"><span>Servidor</span><strong>+{{ pontos_servidor }}</strong></div>
+                                <hr class="tabela-divisor">
+                                <div class="tabela-linha total"><span>Total de Pontos</span><strong style="color: {% if score >= 90 %}#2E7D32{% elif score >= 70 %}#41A75A{% elif score >= 50 %}#E8C547{% elif score >= 25 %}#E8843A{% else %}#660404{% endif %};">{{ score }} pts</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </section>
         {% endif %}
     </main>
