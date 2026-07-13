@@ -223,30 +223,43 @@
                     </div>
 
                     <!-- INFOS DO SERVIDOR -->
-                    <div class="check {{ 'positivo' if pontos_servidor >= 5 else 'negativo' }}">
+                    <div class="check {% if pontos_servidor == 10 %}positivo{% elif pontos_servidor == 5 %}regular{% else %}negativo{% endif %}">
                         <details>
                             <summary style="cursor: pointer; outline: none;">
                                 <span class="simbolo">{{ '✓' if pontos_servidor >= 5 else '✗' }}</span>
-                                {{ 'Servidor não expõe informações sensíveis' if pontos_servidor >= 5 else 'Servidor expõe informações sensíveis' }}
+                                <span class="titulo-check">
+                                    {% if servidor_detalhes.server_header[0] == 'erro' %}
+                                        Não foi possível verificar o servidor
+                                    {% elif pontos_servidor == 10 %}
+                                        Servidor não expõe informações sensíveis
+                                    {% elif pontos_servidor == 5 %}
+                                        Servidor expõe algumas informações sensíveis
+                                    {% else %}
+                                        Servidor expõe informações sensíveis
+                                    {% endif %}
+                                </span>
                                 <span class="seta">▼</span>
                             </summary>
 
                             <div class="explicacao-conteudo" style="margin-top: 8px; padding-left: 15px; font-size: 0.9rem; line-height: 1.4; opacity: 0.9;">
                                 <p>
-                                    <span class="termo-chave">Header Server</span> -
-                                    {{ servidor_detalhes.server_header[1] if servidor_detalhes.server_header[1] else 'não informado' }}
-                                    {% if servidor_detalhes.server_header[0] == 'exposto.' %}
-                                        revela a versão do software rodando no servidor, o que pode facilitar ataques direcionados a vulnerabilidades conhecidas dessa versão.
+                                    <span class="termo-chave">Header Server</span>
+                                    {% if servidor_detalhes.server_header[0] == 'exposto' %}
+                                        - revela a versão do software rodando no servidor, o que pode facilitar ataques direcionados a vulnerabilidades conhecidas dessa versão.
+                                    {% elif servidor_detalhes.server_header[0] == 'erro' %}
+                                        - Não foi possível verificar o Header Server.
                                     {% else %}
-                                        não expõe detalhes de versão, o que é uma boa prática de segurança.
+                                        - não expõe detalhes de versão, o que é uma boa prática de segurança.
                                     {% endif %}
                                 </p>
                                 <p>
                                     <span class="termo-chave">X-Powered-By</span>
                                     {% if servidor_detalhes.x_powered_by[0] == 'exposto' %}
-                                        {{ servidor_detalhes.x_powered_by[1] }} — Revela a tecnologia por trás do site, facilitando o ataque de alguém mal-intencionado.
+                                        — Revela a tecnologia por trás do site, facilitando o ataque de alguém mal-intencionado.
+                                    {% elif servidor_detalhes.x_powered_by[0] == 'erro' %}
+                                        - Não foi possível verificar o X-Powered-By.
                                     {% else %}
-                                        não presente — boa prática, reduz informações disponíveis para um atacante.
+                                        — não presente — boa prática, reduz informações disponíveis para um atacante.
                                     {% endif %}
                                 </p>
                             </div>
