@@ -181,7 +181,29 @@ def verificar_headers(url):     # pontos vai de 0 a 25
     }
 
     try:
-        resposta = requests.get(url, timeout=5)
+        try:
+            headers_request = {
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/138.0 Safari/537.36"
+                )
+            }
+
+            resposta = requests.get(
+                url,
+                headers=headers_request,
+                timeout=5,
+                allow_redirects=True
+            )
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError):
+            url_http = url.replace("https://", "http://")
+            resposta = requests.get(
+                url_http,
+                headers=headers_request,
+                timeout=5,
+                allow_redirects=True
+            )
         headers = resposta.headers
 
         pontos = 0
@@ -242,7 +264,8 @@ def verificar_headers(url):     # pontos vai de 0 a 25
 
         return pontos, detalhes  
 
-    except:
+    except Exception as e:
+        print("ERRO headers:", type(e).__name__, e)
         return 0, detalhes_padrao
     
 def verificar_servidor(url):    # pontos vai de 0 a 10
@@ -255,7 +278,25 @@ def verificar_servidor(url):    # pontos vai de 0 a 10
     }
 
     try:
-        resposta = requests.get(url, timeout=5)
+        try:
+            headers_request = {
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/138.0 Safari/537.36"
+                )
+            }
+
+            resposta = requests.get(
+                url,
+                headers=headers_request,
+                timeout=5,
+                allow_redirects=True
+            )
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError):
+            url_http = url.replace("https://", "http://")
+            resposta = requests.get(url_http, timeout=5)
+
         server_header = resposta.headers.get("Server", "")
         powered_by = resposta.headers.get("X-Powered-By", "")
 
@@ -279,7 +320,8 @@ def verificar_servidor(url):    # pontos vai de 0 a 10
 
         return pontos, detalhes 
 
-    except:
+    except Exception as e:
+        print("ERRO servidor:", type(e).__name__, e)
         return 0, detalhes_erro
 
 def calcular_pontuacao(safe_status, https_status, cert_status, dias_restantes,
