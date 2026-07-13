@@ -12,10 +12,11 @@
 </head>
 <body>
     <header>
+      <a href="/" class="header-link">
         <img src="{{ url_for('static', filename='img/Logo.png') }}" alt="Logo SecureScan" class="logo-img">
-
         <h1 class="logo">Secure<span>Scan</span></h1>
         <p class="subtitle">Verificador de Segurança</p>
+      </a>
     </header>
 
     <main>
@@ -274,6 +275,7 @@
                                 <div class="tabela-linha total"><span>Total de Pontos</span><strong style="color: {% if score >= 90 %}#2E7D32{% elif score >= 70 %}#41A75A{% elif score >= 50 %}#E8C547{% elif score >= 25 %}#E8843A{% else %}#660404{% endif %};">{{ score }} pts</strong></div>
                             </div>
                         </div>
+                          <a href="/" class="btn-limpar">Limpar</a>
                     </div>
 
                 </div>

@@ -54,6 +54,17 @@ header {
     font-family: 'Inter', sans-serif;
 }
 
+.header-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+}
+
+.header-link:hover .logo {
+    filter: drop-shadow(0 0 8px var(--cor-primaria-glow));
+    transition: 0.3s;
+}
+
 main {
     width: 80%;
     max-width: 900px;
@@ -389,4 +400,32 @@ details[open] summary .seta {
 
 details[open] .explicacao-conteudo {
     animation: revelarConteudo 0.5s ease;
+}
+
+.btn-limpar {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.8rem;
+    background: rgba(25, 14, 46, 0.4);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    color: var(--cor-texto-suave);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    font-family: 'Inter', sans-serif;
+    margin-top: 0.5rem;
+}
+
+.btn-limpar:hover {
+    background: var(--cor-primaria); 
+    color: white;
+    border-color: #7c3aed;
+    transform: scale(1.02);
+    box-shadow: 0 0 12px rgba(232, 132, 58, 0.2);
 }
