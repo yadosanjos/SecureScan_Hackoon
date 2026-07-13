@@ -33,13 +33,18 @@ def verificar_safe_browsing(url): #safe browsing
         }
     }
 
-    response = requests.post(endpoint, json=payload, timeout=5)
-    result = response.json()
+    try:
+        response = requests.post(endpoint, json=payload, timeout=5)
+        response.raise_for_status()
+        result = response.json()
 
-    if "matches" in result:
-        return "perigoso"
-    else:
-        return "seguro"
+        if "matches" in result:
+            return "perigoso"
+        else:
+            return "seguro"
+    except Exception as e:
+        print("ERRO Safe Browsing:", e)
+        return "desconhecido"
     
 def verificar_https(url):
     url = url.strip()
@@ -69,12 +74,14 @@ def verificar_idade_dominio(url):
         if not url.startswith(("http://", "https://")):
             url = "https://" + url
 
-        dominio = urlparse(url).netloc
+        dominio = urlparse(url).netloc.replace("www.", "")
 
-        # remove "www." se tiver, e pega só o domínio raiz simplificado
-        dominio = dominio.replace("www.", "")
+        if dominio.endswith(".br"):
+            endpoint = f"https://rdap.registro.br/domain/{dominio}"
+        else:
+            endpoint = f"https://rdap.org/domain/{dominio}"
 
-        resposta = requests.get(f"https://rdap.org/domain/{dominio}", timeout=5)
+        resposta = requests.get(endpoint, timeout=5)
 
         if resposta.status_code != 200:
             return "desconhecido", None
@@ -147,9 +154,18 @@ def verificar_certificado(url):
         print(e)
         return "erro", None, None
     
-def verificar_headers(url):
+def verificar_headers(url):     # pontos vai de 0 a 25
     if not url.startswith(("http://", "https://")):
         url = "https://" + url
+
+    detalhes_padrao = {
+        "hsts": ("ausente", None),
+        "csp": ("ausente", None),
+        "clickjacking": ("desprotegido", None),
+        "xcto": ("ausente", None),
+        "referrer_policy": ("ausente", None),
+        "permissions_policy": ("ausente", None),
+    }
 
     try:
         resposta = requests.get(url, timeout=5)
@@ -211,14 +227,19 @@ def verificar_headers(url):
         else:
             detalhes["permissions_policy"] = ("ausente", None)
 
-        return pontos, detalhes  # pontos vai de 0 a 25
+        return pontos, detalhes  
 
     except:
-        return 0, {}
+        return 0, detalhes_padrao
     
-def verificar_servidor(url):
+def verificar_servidor(url):    # pontos vai de 0 a 10
     if not url.startswith(("http://", "https://")):
         url = "https://" + url
+
+    detalhes_erro = {
+        "server_header": ("erro", "não informado"),
+        "x_powered_by": ("erro", None),
+    }
 
     try:
         resposta = requests.get(url, timeout=5)
@@ -243,10 +264,10 @@ def verificar_servidor(url):
         else:
             detalhes["x_powered_by"] = ("exposto", powered_by)
 
-        return pontos, detalhes  # pontos vai de 0 a 10
+        return pontos, detalhes 
 
     except:
-        return 0, {}
+        return 0, detalhes_erro
 
 def calcular_pontuacao(safe_status, https_status, cert_status, dias_restantes,
                         idade_status, pontos_headers, pontos_servidor):

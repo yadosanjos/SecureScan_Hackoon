@@ -265,6 +265,11 @@ main {
     border-left: 5px solid #AF69EA;
 }
 
+.regular {
+    background-color: #d6b70b7a;
+    border-left: 5px solid #c7bb18;
+}
+
 .negativo {
     background-color: #2f0101;
     border-left: 5px solid #660000;
