@@ -286,10 +286,10 @@
                             <div class="bloco-tabela">
                                 <span class="titulo-bloco">Distribuição de Pontos</span>
                                 <div class="tabela-linhas">
-                                    <div class="tabela-linha"><span>Safe Browsing</span><strong>+{% if status == 'seguro' %}20{% else %}0{% endif %}</strong></div>
-                                    <div class="tabela-linha"><span>HTTPS</span><strong>+{% if https_status == 'ativo' %}10{% else %}0{% endif %}</strong></div>
-                                    <div class="tabela-linha"><span>SSL / Certificado</span><strong>+{% if cert_status == 'valido' %}15{% else %}0{% endif %}</strong></div>
-                                    <div class="tabela-linha"><span>Idade Domínio</span><strong>+{% if idade_status == 'bom' %}20{% else %}5{% endif %}</strong></div>
+                                    <div class="tabela-linha"><span>Safe Browsing</span><strong>+{{ pontos_detalhes.safe_browsing }}</strong></div>
+                                    <div class="tabela-linha"><span>HTTPS</span><strong>+{{ pontos_detalhes.https }}</strong></div>
+                                    <div class="tabela-linha"><span>SSL / Certificado</span><strong>+{{ pontos_detalhes.ssl }}</strong></div>
+                                    <div class="tabela-linha"><span>Idade Domínio</span><strong>+{{ pontos_detalhes.idade }}</strong></div>
                                     <div class="tabela-linha"><span>Headers</span><strong>+{{ pontos_headers }}</strong></div>
                                     <div class="tabela-linha"><span>Servidor</span><strong>+{{ pontos_servidor }}</strong></div>
                                     <hr class="tabela-divisor">

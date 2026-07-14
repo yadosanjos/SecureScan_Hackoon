@@ -330,21 +330,18 @@ def calcular_pontuacao(safe_status, https_status, cert_status, dias_restantes,
     # --- Safe Browsing: 30 pts + corte crítico ---
     pontos_safe = 30 if safe_status == "seguro" else 0
 
-    # --- HTTPS + SSL: 25 pts ---
-    pontos_https_ssl = 0
-    if https_status == "ativo":
-        pontos_https_ssl += 10
-        if cert_status == "valido":
-            pontos_https_ssl += 10
-            if dias_restantes and dias_restantes > 30:
-                pontos_https_ssl += 5
-            else:
-                pontos_https_ssl += 2  # válido mas prestes a vencer
+    # --- HTTPS ---
+    pontos_https = 10 if https_status == "ativo" else 0
+
+    # --- SSL: 25 pts ---
+    pontos_ssl = 0
+    if https_status == "ativo" and cert_status == "valido":
+        pontos_ssl = 10 + (5 if dias_restantes and dias_restantes > 30 else 2)
 
     # --- Idade do domínio: 10 pts ---
     pontos_idade = {"bom": 10, "suspeito": 4}.get(idade_status, 2)
 
-    total = (pontos_safe + pontos_https_ssl + pontos_headers +
+    total = (pontos_safe + pontos_https + pontos_ssl + pontos_headers +
               pontos_idade + pontos_servidor)
 
     # --- Corte crítico: Safe Browsing perigoso trava o score ---
@@ -363,8 +360,15 @@ def calcular_pontuacao(safe_status, https_status, cert_status, dias_restantes,
         classificacao = "Fraco"
     else:
         classificacao = "Crítico"
+    
+    pontos_detalhes = {
+        "safe_browsing": pontos_safe,
+        "https": pontos_https,
+        "ssl": pontos_ssl,
+        "idade": pontos_idade,
+    }
 
-    return total, classificacao
+    return total, classificacao, pontos_detalhes
 
 
 @app.route("/") #lê e exibe uma página em html
@@ -403,7 +407,7 @@ def analisar():
     pontos_headers, headers_detalhes = verificar_headers(url)
     pontos_servidor, servidor_detalhes = verificar_servidor(url)
 
-    score, classificacao = calcular_pontuacao(
+    score, classificacao, pontos_detalhes = calcular_pontuacao(
         status, https_status, cert_status, dias_restantes,
         idade_status, pontos_headers, pontos_servidor
     )
@@ -420,6 +424,7 @@ def analisar():
         servidor_detalhes=servidor_detalhes, score=score, 
         classificacao=classificacao, 
         pontos_servidor=pontos_servidor,
+        pontos_detalhes=pontos_detalhes,
         historico=session.get("historico", [])
     )
 
