@@ -41,7 +41,16 @@ Certifique-se de ter o Python instalado. No terminal, execute o comando abaixo p
 pip install flask requests python-whois python-dotenv
 ```
 
-### 3. Executar a aplicação
+### 3. Configurar a chave da API
+Copie o arquivo de exemplo e cole sua própria chave:
+cp .env.example .env
+
+Edite o .env e substitua "sua_chave_aqui" pela sua chave do Google Safe Browsing
+(gere a sua em https://developers.google.com/safe-browsing/v4/get-started).
+
+⚠️ O arquivo .env não deve ser commitado — ele já está no .gitignore.
+
+### 4. Executar a aplicação
 Para iniciar o servidor local do Flask, execute:
 ```
 python app.py
