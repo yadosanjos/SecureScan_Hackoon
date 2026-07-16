@@ -1,6 +1,6 @@
 # 🛡️ SecureScan — Verificador de Segurança de Sites
 
-O **SecureScan** é uma ferramenta web desenvolvida em Python e Flask que analisa a confiabilidade de um site com base em diversos critérios de segurança, gerando um relatório detalhado com uma pontuação de 0 a 100.
+O **SecureScan** é uma ferramenta web desenvolvida em Python e Flask que analisa a confiabilidade de um site com base em diversos critérios de segurança, gerando um relatório detalhado com uma pontuação de 0 a 100. O objetivo foi criar uma ferramenta acessível para todo mundo, não só para quem entende ou se interessa por tecnologia, alertando sobre vulnerabilidades de forma clara e compreensível.
 
 ---
 
@@ -50,6 +50,20 @@ A pontuação final vai de 0 a 100 e é composta pela soma dos seguintes critér
 * **Informações do servidor (até 10 pontos):** verifica se o site evita expor detalhes técnicos como número de versão do servidor ou tecnologia utilizada por meio dos cabeçalhos Server e X-Powered-By, cada um conferindo até 5 pontos.
 
 * **Regra de segurança adicional:** caso o Google Safe Browsing identifique o site como uma ameaça, a pontuação final é automaticamente limitada a 15 pontos, independentemente do desempenho nos outros critérios. Isso evita que a ferramenta passe uma falsa sensação de segurança sobre um site perigoso.
+
+---
+
+## 🏆 Classificação Final
+
+Com base na soma total dos pontos, o SecureScan traduz o valor em um selo de classificação,  acompanhado de uma cor indicativa, exibido diretamente na tela junto com o restante do relatório. Isso torna o resultado mais intuitivo, mesmo para quem não conhece os critérios técnicos por trás da análise:
+
+| Classificação          | Cor                | Pontuação total   |
+|------------------------|--------------------|------------------:|
+| Excelente              | 🟩 Verde escuro   | 90-100            |
+| Bom                    | 🟢 Verde claro    | 70-89             |
+| Regular                | 🟡 Amarelo        | 50-69             |
+| Fraco                  | 🟠 Laranja        | 25-49             |
+| Crítico                | 🔴 Vermelho       | 0-24              |
 
 ---
 
